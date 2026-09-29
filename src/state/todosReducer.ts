@@ -8,6 +8,7 @@ export type TodosAction =
   | { type: 'removed'; id: string }
   | { type: 'completedCleared' }
   | { type: 'hydrated'; todos: Todo[] }
+  | { type: 'replaced'; id: string; todo: Todo }
 
 export function todosReducer(todos: Todo[], action: TodosAction): Todo[] {
   switch (action.type) {
@@ -46,6 +47,12 @@ export function todosReducer(todos: Todo[], action: TodosAction): Todo[] {
 
     case 'hydrated':
       return action.todos
+
+    // Swaps the row at `id` for the authoritative one the server returned.
+    // Used to turn an optimistic row into a confirmed one: the local id is
+    // temporary, the server assigns the real one.
+    case 'replaced':
+      return todos.map((todo) => (todo.id === action.id ? action.todo : todo))
 
     default:
       return todos

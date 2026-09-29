@@ -53,4 +53,32 @@ describe('todosReducer', () => {
 
     expect(next).toBe(state)
   })
+
+  it('replaces the row at the given id, leaving the others alone', () => {
+    const confirmed: Todo = { id: 'real-1', title: 'Buy oat milk', completed: true, createdAt: 7 }
+
+    const next = todosReducer([milk, bread], { type: 'replaced', id: '1', todo: confirmed })
+
+    expect(next).toEqual([confirmed, bread])
+  })
+
+  it('does nothing when the replaced row is gone', () => {
+    const confirmed: Todo = { id: 'real-1', title: 'Buy oat milk', completed: false, createdAt: 7 }
+
+    const next = todosReducer([milk], { type: 'replaced', id: 'missing', todo: confirmed })
+
+    expect(next).toEqual([milk])
+  })
+
+  it('keeps the row in place when the id changes on replace', () => {
+    // The reducer supports an id change in place. The context deliberately does
+    // not use it (a changed id would remount the row and drop local state), but
+    // the behaviour is pinned here so a future caller can rely on it.
+    const confirmed: Todo = { id: 'server-9', title: 'Buy milk', completed: false, createdAt: 9 }
+    const state = [milk, bread]
+
+    const next = todosReducer(state, { type: 'replaced', id: '1', todo: confirmed })
+
+    expect(next.map((todo) => todo.id)).toEqual(['server-9', '2'])
+  })
 })
