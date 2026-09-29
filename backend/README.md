@@ -37,8 +37,14 @@ Generate a real secret with:
 
     .venv/bin/python -m pytest
 
-45 tests covering CRUD, validation, the bulk clear, filtering, 404s, the error
-envelope, the database constraint and the JSON catch-all.
+57 tests: CRUD, validation, the bulk clear, filtering, 404s, the error envelope,
+the database constraint, the JSON catch-all, and the settings helpers.
+
+Note the endpoint tests run against in-memory SQLite, so they cannot catch a bad
+`DJANGO_DB_PATH` — Django substitutes an in-memory database under test and an
+empty database name goes unnoticed. That is what `config/tests/test_settings.py`
+is for, and it is worth knowing before you trust a green suite as proof that
+`manage.py runserver` will start.
 
 ## Endpoints
 
@@ -107,6 +113,7 @@ at all. If the frontend calls cross-origin instead, list its origin in
 ## Architecture notes
 
     config/            settings, urls, logging formatter, wsgi/asgi
+    config/tests/      settings helper tests (blank env var = unset)
     todos/
       models.py        Todo, plus a DB check constraint against blank titles
       serializers.py   wire shape, epoch-ms conversion, title validation

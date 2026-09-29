@@ -72,7 +72,7 @@ The server is the source of truth and no component talks to it directly.
 Two suites, one per half of the stack.
 
     npm run test:run                            # frontend: unit + component, API mocked
-    cd backend && .venv/bin/python -m pytest    # backend: 45 tests
+    cd backend && .venv/bin/python -m pytest    # backend: 57 tests
 
 The frontend has two extra opt-in layers that need a live server:
 

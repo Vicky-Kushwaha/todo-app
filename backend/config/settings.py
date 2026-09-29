@@ -18,21 +18,34 @@ load_dotenv(BASE_DIR / ".env")
 
 
 def env(name: str, default: str | None = None) -> str | None:
-    """Read a string setting from the environment."""
-    return os.environ.get(name, default)
+    """Read a string setting from the environment.
+
+    A variable that is set but blank is treated as unset, so ``.env.example``
+    can list every key and leaving one blank means "use the default". Without
+    this, ``DJANGO_DB_PATH=`` resolves to an empty database name and Django
+    refuses to start — while the test suite stays green, because SQLite falls
+    back to an in-memory database under test.
+    """
+    value = os.environ.get(name)
+    if value is None or value.strip() == "":
+        return default
+    return value
 
 
 def env_bool(name: str, default: bool = False) -> bool:
     """Read a boolean setting. Accepts 1/true/yes/on (case-insensitive)."""
-    raw = os.environ.get(name)
+    raw = env(name)
     if raw is None:
         return default
     return raw.strip().lower() in {"1", "true", "yes", "on"}
 
 
 def env_list(name: str, default: str = "") -> list[str]:
-    """Read a comma-separated list setting, dropping empty entries."""
-    raw = os.environ.get(name, default)
+    """Read a comma-separated list setting, dropping empty entries.
+
+    Blank means unset and falls back to the default, like `env`.
+    """
+    raw = env(name, default) or ""
     return [item.strip() for item in raw.split(",") if item.strip()]
 
 
