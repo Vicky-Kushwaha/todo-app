@@ -9,7 +9,7 @@
  *
  * Opt-in, because it needs both servers running:
  *
- *   cd ../todo-api && .venv/bin/python manage.py runserver 127.0.0.1:8000
+ *   cd backend && .venv/bin/python manage.py runserver 127.0.0.1:8000
  *   npm run dev                                     # http://127.0.0.1:5173
  *   VITE_RUN_INTEGRATION=1 npm run test:run
  *

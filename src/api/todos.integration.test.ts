@@ -4,7 +4,7 @@
  * Skipped unless VITE_RUN_INTEGRATION=1, so the default `npm run test:run` never
  * needs a server. Run it with the API up:
  *
- *   cd ../todo-api && .venv/bin/python manage.py runserver 127.0.0.1:8000
+ *   cd backend && .venv/bin/python manage.py runserver 127.0.0.1:8000
  *   VITE_RUN_INTEGRATION=1 npm run test:run
  *
  * This exercises the real client module against the real endpoints — the
